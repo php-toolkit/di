@@ -113,6 +113,7 @@ class Container implements ContainerInterface, \ArrayAccess, \IteratorAggregate,
 
         // 已经是个服务实例 object 不是闭包 closure
         if (\is_object($definition)) {
+            $this->ids[$id] = (bool)$opts['locked'];
             $this->services[$id] = new Service($definition, $args, $opts['shared'], $opts['locked']);
 
             return $this;
@@ -353,7 +354,7 @@ class Container implements ContainerInterface, \ArrayAccess, \IteratorAggregate,
     {
         if (!$this->has($id)) {
             // a class name.
-            if (strpos($id, '\\') && class_exists($id)) {
+            if (\strpos($id, '\\') && \class_exists($id)) {
                 /** @noinspection ExceptionsAnnotatingAndHandlingInspection */
                 $this->set($id, new $id);
             } else {
